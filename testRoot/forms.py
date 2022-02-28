@@ -2,7 +2,7 @@ from dataclasses import fields
 from operator import attrgetter
 from tkinter import Widget
 from django import forms
-from .models import Play, Eat, TypeOfPlace, City, PrefeCode, SaveRoot, KeepRoot, CommentDetail, Evaluation, GoodCheck, TokyoCity
+from .models import Play, Eat, TypeOfPlace, City, PrefeCode, SaveRoot, KeepRoot, CommentDetail, Evaluation, GoodCheck, TokyoCity, SavePlace, CommentDetailTokyo
 
 class PlayForm(forms.ModelForm):
     class Meta:
@@ -120,6 +120,16 @@ class CommentForm(forms.ModelForm):
             'comment': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'コメント'}),
         }
         
+class CommentTokyoForm(forms.ModelForm):
+    class Meta:
+        model = CommentDetailTokyo
+        fields = '__all__'
+        widgets = {
+            'author': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'userName', 'id': 'author1', 'type': 'hidden'}),
+            'comment_place': forms.TextInput(attrs={'class': 'form-control'}),
+            'comment': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'コメント'}),
+        }
+        
 class EvaluationForm(forms.ModelForm):
     class Meta:
         model = Evaluation
@@ -132,6 +142,15 @@ class EvaluationForm(forms.ModelForm):
 class GoodCheckForm(forms.ModelForm):
     class Meta:
         model = GoodCheck
+        fields = '__all__'
+        widgets = {
+            'author': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'userName'}),
+            'place': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+        
+class SavePlaceForm(forms.ModelForm):
+    class Meta:
+        model = SavePlace
         fields = '__all__'
         widgets = {
             'author': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'userName'}),

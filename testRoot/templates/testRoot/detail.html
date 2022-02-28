@@ -1,416 +1,153 @@
 {% extends 'layout.html' %}
 {% load static %}
 {% block content %}
-<h1 style="margin-top: 130px; text-align: center; color: #3c4c46;">{{content.name}}</h1>
+<h1 style="margin-top: 130px; text-align: center; color: #3c4c46;">{{content.place.name}}</h1>
 <hr />
-<div class="flexbox">
-    <div class="l-wrapper_01 is-surface is-surface_03" style="margin-right:1%;">
-        <article class="card_01">
-            <div class="card__header_01">
-                <figure class="card__thumbnail_01">
-                    <img src="/media/{{content.first.image}}" width="100%" height="100%" border="0" />
-                </figure>
-            </div>
-            <div class="border-line"></div>
-            <div class="card__body_01">
-                <div style="display:flex;">
-                    <div class="abc">
-                        <p>A</p>
+<div class="container">
+    <div class="row row-cols-auto">
+        <div class="col-md-6" style="margin: 0 auto;">
+            <div class="l-wrapper_01 is-surface is-surface_03" style="margin-right:1%;">
+                <article class="card_01">
+                    <div class="card__header_01">
+                        <figure class="card__thumbnail_01">
+                            <img src="/media/{{content.place.image}}" width="100%" height="100%" border="0" />
+                        </figure>
                     </div>
-                    <p class="card__title_01" style="color: #3c4c46;">{{content.first.name}}</p>
-                </div>
-                <p class="labels">住所:</p>
-                <p class="card__text2_01" style="color: #3c4c46;">{{content.first.address}}</p>
-                <p class="labels">オススメポイント:</p>
-                <p class="card__text2_01" style="color: #3c4c46;">{{content.first.comment}}</p>
-            </div>
-            <div class="card__footer_01">
-                <form action="{% url 'like' content.first.id%}" method="post">
-                    {% csrf_token %}
-                    <p>
-                        <input type="hidden" name="place" class="form-control" value="{{detail1}}" required="" id="id_place"> 
-                        <input type="hidden" name="author" value="{{id}}" class="form-control" placeholder="userName" required="">   
-                    </p>
-                    <button type="submit" class="btn btn-outline-danger"><i class="bi bi-heart"></i>&nbsp;{{content.first.good}}</button>
-                </form>
-                <div class="card_switch_03" style="margin-left:auto;cursor:pointer;"><img src="/static/image/星アイコン1.png"
-                        onmouseover="this.src='/static/image/星アイコン2.png'"
-                        onmouseout="this.src='/static/image/星アイコン1.png'">
-                </div>
-                <div class="card_switch" style="margin-left:auto;cursor:pointer"><img src="/static/image/コメントアイコン.png">
-                </div>
-            </div>
-        </article>
-        <article class="card_02">
-            <div style="display:flex;margin:1%;">
-                <p style="font-size:1.6rem;font-weight: bold; color: #3c4c46;">{{content.first.name}}</p>
-                <div style="margin-left:auto;"><img src="/static/image/バックスペースのアイコン素材.png" class="card_switch_back"
-                        alt="サンプル" onmouseover="this.src='/static/image/バックスペースのアイコン素材2.png'"
-                        onmouseout="this.src='/static/image/バックスペースのアイコン素材.png'" style="cursor:pointer;"></div>
-            </div>
-            <div style="border-top: 1px solid #ddd;"></div>
-            <div class="comment-view" style="height:68%;">
-                {% if len_comment1 == 0 %}
-                <p style="text-align: center; color: #3c4c46;">あなたが最初のコメントを残そう!</p>
-                {% else %}
-                {% for comment in comment1 %}
-                <div style="display:flex;">
-                    <div style="margin-top:auto;margin-bottom:auto;"><img src="/static/image/人.png" width="32px"
-                            height="32px"></div>
-                    <div class="balloon1-left">
-                        <p>{{comment}}</p>
-                        <p style="font-size: 10px; font-weight: lighter;">{{comment.created_at}}</p>
-                    </div>
-                </div>
-                {% endfor %}
-                {% endif %}
-                <div style="border-top: 1px solid #ddd;"></div>
-            </div>
-            <div class="mycomment" style="margin:2%;height:13%;">
-                <!-- <div class="comment-area">
-                    <p></p>
-                </div> -->
-                <form action="{% url 'savecomment' %}" method="post">
-                    <!-- １個目 -->
-                    {% csrf_token %}
-                    <p>
-                        <input type="text" name="comment" class="form-control" placeholder="コメント" maxlength="255"
-                            required="" id="id_comment">
-                        <input type="hidden" name="comment_place" value="{{detail1}}" class="form-control" required=""
-                            id="id_comment_place">
-                        <input type="hidden" name="author" value="{{id}}" class="form-control" placeholder="userName"
-                            id="author1">
-                    </p>
-                    <div style="text-align: center;">
-                        <button type="submit" class="btn btn-outline-primary">送信</button>
-                    </div>
-                </form>
-            </div>
-        </article>
-        <article class="card_03">
-            <div style="position:relative;width:100%;height:100%;">
-                <div class="dark_back"></div>
-                <div
-                    style="position:absolute;width:100%;height:100%;display:flex;justify-content:center;align-items:center;">
-                    <div class="evaluate_area">
-                        <div class="card_switch_03_back" style="float:right;cursor:pointer;"><img
-                                src="/static/image/バックスペースのアイコン素材.png"
-                                onmouseover="this.src='/static/image/バックスペースのアイコン素材2.png'"
-                                onmouseout="this.src='/static/image/バックスペースのアイコン素材.png'">
+                    <div class="border-line"></div>
+                    <div class="card__body_01">
+                        <div style="display:flex;">
+                            <div class="abc">
+                                <p>A</p>
+                            </div>
+                            <p class="card__title_01" style="color: #3c4c46;">{{content.place.name}}</p>
                         </div>
-                        <!-- 評価１個目 -->
-                        <form action="{% url 'saveevaluation' %}" method="post">
+                        <p class="labels">住所:</p>
+                        <p class="card__text2_01" style="color: #3c4c46;">{{content.place.address}}</p>
+                        <p class="labels">オススメポイント:</p>
+                        <p class="card__text2_01" style="color: #3c4c46;">{{content.place.comment}}</p>
+                    </div>
+                    <div class="card__footer_01">
+                        <form action="{% url 'like' content.id%}" method="post">
                             {% csrf_token %}
-                            <div class="hyouka">
-                                <input id="hoshi1" type="radio" name="rate" required="" value="5" />
-                                <label for="hoshi1">★</label>
-                                <input id="hoshi2" type="radio" name="rate" required="" value="4" />
-                                <label for="hoshi2">★</label>
-                                <input id="hoshi3" type="radio" name="rate" required="" value="3" />
-                                <label for="hoshi3">★</label>
-                                <input id="hoshi4" type="radio" name="rate" required="" value="2" />
-                                <label for="hoshi4">★</label>
-                                <input id="hoshi5" type="radio" name="rate" required="" value="1" />
-                                <label for="hoshi5">★</label>
-                            </div>
-                            <p style="text-align:center;">年代を選択してください。</p>
-                            <div style="margin: 0 auto;width:70%;"><input type="hidden" name="age" required=""
-                                    id="id_age" class="single-slider" value="20" /></div>
-                            <p style="text-align:center;margin-top:3%;">性別を選択してください。</p>
-                            <div class="gender_group">
-                                <input type="radio" id="man" value="male" name="gender" required=""><label for="man"
-                                    class="gender" style="margin:1%;"><img src="/static/image/男マーク.png"></label>
-                                <input type="radio" id="woman" value="female" name="gender" required=""><label
-                                    for="woman" class="gender" style="margin:1%;"><img
-                                        src="/static/image/女マーク.png"></label>
-                            </div>
                             <p>
-                                <input type="hidden" name="place" class="form-control" required="" id="id_place"
-                                    value="{{detail1}}">
-                                <input name="author" type="hidden" class="form-control" placeholder="userName"
-                                    id="author1" required="" value="{{id}}">
+                                <input type="hidden" name="place" class="form-control" value="{{detail1}}" required="" id="id_place"> 
+                                <input type="hidden" name="author" value="{{id}}" class="form-control" placeholder="userName" required="">   
+                            </p>
+                            <button type="submit" class="btn btn-outline-danger"><i class="bi bi-heart"></i>&nbsp;{{content.place.good}}</button>
+                        </form>
+                        <div class="card_switch_03" style="margin-left:auto;cursor:pointer;"><img src="/static/image/星アイコン1.png"
+                                onmouseover="this.src='/static/image/星アイコン2.png'"
+                                onmouseout="this.src='/static/image/星アイコン1.png'">
+                        </div>
+                        <div class="card_switch" style="margin-left:auto;cursor:pointer"><img src="/static/image/コメントアイコン.png">
+                        </div>
+                    </div>
+                </article>
+                <article class="card_02">
+                    <div style="display:flex;margin:1%;">
+                        <p style="font-size:1.6rem;font-weight: bold; color: #3c4c46;">{{content.place.name}}</p>
+                        <div style="margin-left:auto;"><img src="/static/image/バックスペースのアイコン素材.png" class="card_switch_back"
+                                alt="サンプル" onmouseover="this.src='/static/image/バックスペースのアイコン素材2.png'"
+                                onmouseout="this.src='/static/image/バックスペースのアイコン素材.png'" style="cursor:pointer;"></div>
+                    </div>
+                    <div style="border-top: 1px solid #ddd;"></div>
+                    <div class="comment-view" style="height:68%;">
+                        {% if len_comment1 == 0 %}
+                        <p style="text-align: center; color: #3c4c46;">あなたが最初のコメントを残そう!</p>
+                        {% else %}
+                        {% for comment in comment1 %}
+                        <div style="display:flex;">
+                            <div style="margin-top:auto;margin-bottom:auto;"><img src="/static/image/人.png" width="32px"
+                                    height="32px"></div>
+                            <div class="balloon1-left">
+                                <p>{{comment}}</p>
+                                <p style="font-size: 10px; font-weight: lighter;">{{comment.created_at}}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        <div style="border-top: 1px solid #ddd;"></div>
+                    </div>
+                    <div class="mycomment" style="margin:2%;height:13%;">
+                        <form action="{% url 'savecomment' %}" method="post">
+                            <!-- １個目 -->
+                            {% csrf_token %}
+                            <p>
+                                <input type="text" name="comment" class="form-control" placeholder="コメント" maxlength="255"
+                                    required="" id="id_comment">
+                                <input type="hidden" name="comment_place" value="{{detail1}}" class="form-control" required=""
+                                    id="id_comment_place">
+                                <input type="hidden" name="author" value="{{id}}" class="form-control" placeholder="userName"
+                                    id="author1">
                             </p>
                             <div style="text-align: center;">
                                 <button type="submit" class="btn btn-outline-primary">送信</button>
                             </div>
                         </form>
                     </div>
-                </div>
-            </div>
-        </article>
-    </div>
-    <div class="l-wrapper_01 is-surface is-surface_03" style="margin-right:1%;">
-        <article class="card_01">
-            <div class="card__header_01">
-                <figure class="card__thumbnail_01">
-                    <img src="/media/{{content.second.image}}" width="100%" height="100%" border="0" />
-                </figure>
-            </div>
-            <div class="border-line"></div>
-            <div class="card__body_01">
-                <div style="display:flex;">
-                    <div class="abc">
-                        <p>B</p>
-                    </div>
-                    <p class="card__title_01" style="color: #3c4c46;">{{content.second.name}}</p>
-                </div>
-                <p class="labels">住所:</p>
-                <p class="card__text2_01" style="color: #3c4c46;">{{content.second.address}}</p>
-                <p class="labels">オススメポイント:</p>
-                <p class="card__text2_01" style="color: #3c4c46;">{{content.second.comment}}</p>
-            </div>
-            <div class="card__footer_01">
-                <form action="{% url 'like' content.second.id%}" method="post">
-                    {% csrf_token %}
-                    <p>
-                        <input type="hidden" name="place" class="form-control" value="{{detail2}}" required="" id="id_place"> 
-                        <input type="hidden" name="author" value="{{id}}" class="form-control" placeholder="userName" required="">   
-                    </p>
-                    <button type="submit" class="btn btn-outline-danger"><i class="bi bi-heart"></i>&nbsp;{{content.second.good}}</button>
-                </form>
-                <div class="card_switch_03" style="margin-left:auto;cursor:pointer;"><img src="/static/image/星アイコン1.png"
-                        onmouseover="this.src='/static/image/星アイコン2.png'"
-                        onmouseout="this.src='/static/image/星アイコン1.png'">
-                </div>
-                <div class="card_switch" style="margin-left:auto;cursor:pointer"><img src="/static/image/コメントアイコン.png">
-                </div>
-            </div>
-        </article>
-        <article class="card_02">
-            <div style="display:flex;margin:1%;">
-                <p style="font-size:1.6rem;font-weight: bold; color: #3c4c46;">{{content.second.name}}</p>
-                <div style="margin-left:auto;"><img src="/static/image/バックスペースのアイコン素材.png" class="card_switch_back"
-                        alt="サンプル" onmouseover="this.src='/static/image/バックスペースのアイコン素材2.png'"
-                        onmouseout="this.src='/static/image/バックスペースのアイコン素材.png'" style="cursor:pointer;"></div>
-            </div>
-            <div style="border-top: 1px solid #ddd;"></div>
-            <div class="comment-view" style="height:68%;">
-                {% if len_comment2 == 0 %}
-                <p style="text-align: center; color: #3c4c46;">あなたが最初のコメントを残そう!</p>
-                {% else %}
-                {% for comment in comment2 %}
-                <div style="display:flex;">
-                    <div style="margin-top:auto;margin-bottom:auto;"><img src="/static/image/人.png" width="32px"
-                            height="32px"></div>
-                    <div class="balloon1-left">
-                        <p>{{comment}}</p>
-                        <p style="font-size: 10px; font-weight: lighter;">{{comment.created_at}}</p>
-                    </div>
-                </div>
-                {% endfor %}
-                {% endif %}
-                <div style="border-top: 1px solid #ddd;"></div>
-            </div>
-            <div class="mycomment" style="margin:2%;height:13%;">
-                <!-- <div class="comment-area">
-                            <p></p>
-                        </div> -->
-                <form action="{% url 'savecomment' %}" method="post">
-                    <!-- 2個目 -->
-                    {% csrf_token %}
-                    <p>
-                        <input type="text" name="comment" class="form-control" placeholder="コメント" maxlength="255"
-                            required="" id="id_comment">
-                        <input type="hidden" name="comment_place" value="{{detail2}}" class="form-control" required=""
-                            id="id_comment_place">
-                        <input type="hidden" name="author" value="{{id}}" class="form-control" placeholder="userName"
-                            id="author1">
-                    </p>
-                    <div style="text-align: center;">
-                        <button type="submit" class="btn btn-outline-primary">送信</button>
-                    </div>
-                </form>
-            </div>
-        </article>
-        <article class="card_03">
-            <div style="position:relative;width:100%;height:100%;">
-                <div class="dark_back"></div>
-                <div
-                    style="position:absolute;width:100%;height:100%;display:flex;justify-content:center;align-items:center;">
-                    <div class="evaluate_area">
-                        <div class="card_switch_03_back" style="float:right;cursor:pointer;"><img
-                                src="/static/image/バックスペースのアイコン素材.png"
-                                onmouseover="this.src='/static/image/バックスペースのアイコン素材2.png'"
-                                onmouseout="this.src='/static/image/バックスペースのアイコン素材.png'">
+                </article>
+                <article class="card_03">
+                    <div style="position:relative;width:100%;height:100%;">
+                        <div class="dark_back"></div>
+                        <div
+                            style="position:absolute;width:100%;height:100%;display:flex;justify-content:center;align-items:center;">
+                            <div class="evaluate_area">
+                                <div class="card_switch_03_back" style="float:right;cursor:pointer;"><img
+                                        src="/static/image/バックスペースのアイコン素材.png"
+                                        onmouseover="this.src='/static/image/バックスペースのアイコン素材2.png'"
+                                        onmouseout="this.src='/static/image/バックスペースのアイコン素材.png'">
+                                </div>
+                                <!-- 評価１個目 -->
+                                <form action="{% url 'saveevaluation' %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="hyouka">
+                                        <input id="hoshi1" type="radio" name="rate" required="" value="5" />
+                                        <label for="hoshi1">★</label>
+                                        <input id="hoshi2" type="radio" name="rate" required="" value="4" />
+                                        <label for="hoshi2">★</label>
+                                        <input id="hoshi3" type="radio" name="rate" required="" value="3" />
+                                        <label for="hoshi3">★</label>
+                                        <input id="hoshi4" type="radio" name="rate" required="" value="2" />
+                                        <label for="hoshi4">★</label>
+                                        <input id="hoshi5" type="radio" name="rate" required="" value="1" />
+                                        <label for="hoshi5">★</label>
+                                    </div>
+                                    <p style="text-align:center;">年代を選択してください。</p>
+                                    <div style="margin: 0 auto;width:70%;"><input type="hidden" name="age" required=""
+                                            id="id_age" class="single-slider" value="20" /></div>
+                                    <p style="text-align:center;margin-top:3%;">性別を選択してください。</p>
+                                    <div class="gender_group">
+                                        <input type="radio" id="man" value="male" name="gender" required=""><label for="man"
+                                            class="gender" style="margin:1%;"><img src="/static/image/男マーク.png"></label>
+                                        <input type="radio" id="woman" value="female" name="gender" required=""><label
+                                            for="woman" class="gender" style="margin:1%;"><img
+                                                src="/static/image/女マーク.png"></label>
+                                    </div>
+                                    <p>
+                                        <input type="hidden" name="place" class="form-control" required="" id="id_place"
+                                            value="{{detail1}}">
+                                        <input name="author" type="hidden" class="form-control" placeholder="userName"
+                                            id="author1" required="" value="{{id}}">
+                                    </p>
+                                    <div style="text-align: center;">
+                                        <button type="submit" class="btn btn-outline-primary">送信</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                        <!-- 評価2個目 -->
-                        <form action="{% url 'saveevaluation' %}" method="post">
-                            {% csrf_token %}
-                            <div class="hyouka">
-                                <input id="hoshi11" type="radio" name="rate" required="" value="5" />
-                                <label for="hoshi11">★</label>
-                                <input id="hoshi22" type="radio" name="rate" required="" value="4" />
-                                <label for="hoshi22">★</label>
-                                <input id="hoshi33" type="radio" name="rate" required="" value="3" />
-                                <label for="hoshi33">★</label>
-                                <input id="hoshi44" type="radio" name="rate" required="" value="2" />
-                                <label for="hoshi44">★</label>
-                                <input id="hoshi55" type="radio" name="rate" required="" value="1" />
-                                <label for="hoshi55">★</label>
-                            </div>
-                            <p style="text-align:center;">年代を選択してください。</p>
-                            <div style="margin: 0 auto;width:70%;"><input type="hidden" name="age" required=""
-                                    id="id_age" class="single-slider" value="20" /></div>
-                            <p style="text-align:center;margin-top:3%;">性別を選択してください。</p>
-                            <div class="gender_group">
-                                <input type="radio" id="man2" value="male" name="gender" required=""><label for="man2"
-                                    class="gender" style="margin:1%;"><img src="/static/image/男マーク.png"></label>
-                                <input type="radio" id="woman2" value="female" name="gender" required=""><label
-                                    for="woman2" class="gender" style="margin:1%;"><img
-                                        src="/static/image/女マーク.png"></label>
-                            </div>
-                            <p>
-                                <input type="hidden" name="place" class="form-control" required="" id="id_place"
-                                    value="{{detail2}}">
-                                <input name="author" type="hidden" class="form-control" placeholder="userName"
-                                    id="author1" required="" value="{{id}}">
-                            </p>
-                            <div style="text-align: center;">
-                                <button type="submit" class="btn btn-outline-primary">送信</button>
-                            </div>
-                        </form>
                     </div>
-                </div>
+                </article>
             </div>
-        </article>
-    </div>
-    <div class="l-wrapper_01 is-surface is-surface_03" style="margin-right:1%;">
-        <article class="card_01">
-            <div class="card__header_01">
-                <figure class="card__thumbnail_01">
-                    <img src="/media/{{content.third.image}}" width="100%" height="100%" border="0" />
-                </figure>
-            </div>
-            <div class="border-line"></div>
-            <div class="card__body_01">
-                <div style="display:flex;">
-                    <div class="abc">
-                        <p>C</p>
-                    </div>
-                    <p class="card__title_01" style="color: #3c4c46;">{{content.third.name}}</p>
-                </div>
-                <p class="labels">住所:</p>
-                <p class="card__text2_01" style="color: #3c4c46;">{{content.third.address}}</p>
-                <p class="labels">オススメポイント:</p>
-                <p class="card__text2_01" style="color: #3c4c46;">{{content.third.comment}}</p>
-            </div>
-            <div class="card__footer_01">
-                <form action="{% url 'like' content.third.id%}" method="post">
-                    {% csrf_token %}
-                    <p>
-                        <input type="hidden" name="place" class="form-control" value="{{detail3}}" required="" id="id_place"> 
-                        <input type="hidden" name="author" value="{{id}}" class="form-control" placeholder="userName" required="">   
-                    </p>
-                    <button type="submit" class="btn btn-outline-danger"><i class="bi bi-heart"></i>&nbsp;{{content.third.good}}</button>
-                </form>
-                <div class="card_switch_03" style="margin-left:auto;cursor:pointer;"><img src="/static/image/星アイコン1.png"
-                        onmouseover="this.src='/static/image/星アイコン2.png'"
-                        onmouseout="this.src='/static/image/星アイコン1.png'">
-                </div>
-                <div class="card_switch" style="margin-left:auto;cursor:pointer"><img src="/static/image/コメントアイコン.png">
-                </div>
-            </div>
-        </article>
-        <article class="card_02">
-            <div style="display:flex;margin:1%;">
-                <p style="font-size:1.6rem;font-weight: bold; color: #3c4c46;">{{content.third.name}}</p>
-                <div style="margin-left:auto;"><img src="/static/image/バックスペースのアイコン素材.png" class="card_switch_back"
-                        alt="サンプル" onmouseover="this.src='/static/image/バックスペースのアイコン素材2.png'"
-                        onmouseout="this.src='/static/image/バックスペースのアイコン素材.png'" style="cursor:pointer;"></div>
-            </div>
-            <div style="border-top: 1px solid #ddd;"></div>
-            <div class="comment-view" style="height:68%;">
-                {% if len_comment3 == 0 %}
-                <p style="text-align: center; color: #3c4c46;">あなたが最初のコメントを残そう!</p>
-                {% else %}
-                {% for comment in comment3 %}
-                <div style="display:flex;">
-                    <div style="margin-top:auto;margin-bottom:auto;"><img src="/static/image/人.png" width="32px"
-                            height="32px"></div>
-                    <div class="balloon1-left">
-                        <p>{{comment}}</p>
-                        <p style="font-size: 10px; font-weight: lighter;">{{comment.created_at}}</p>
-                    </div>
-                </div>
-                {% endfor %}
-                {% endif %}
-                <div style="border-top: 1px solid #ddd;"></div>
-            </div>
-            <div class="mycomment" style="margin:2%;height:13%;">
-                <!-- <div class="comment-area">
-                            <p></p>
-                        </div> -->
-                <form action="{% url 'savecomment' %}" method="post">
-                    <!-- 3個目 -->
-                    {% csrf_token %}
-                    <p>
-                        <input type="text" name="comment" class="form-control" placeholder="コメント" maxlength="255"
-                            required="" id="id_comment">
-                        <input type="hidden" name="comment_place" value="{{detail3}}" class="form-control" required=""
-                            id="id_comment_place">
-                        <input type="hidden" name="author" value="{{id}}" class="form-control" placeholder="userName"
-                            id="author1">
-                    </p>
-                    <div style="text-align: center;">
-                        <button type="submit" class="btn btn-outline-primary">送信</button>
-                    </div>
-                </form>
-            </div>
-        </article>
-        <article class="card_03">
-            <div style="position:relative;width:100%;height:100%;">
-                <div class="dark_back"></div>
-                <div
-                    style="position:absolute;width:100%;height:100%;display:flex;justify-content:center;align-items:center;">
-                    <div class="evaluate_area">
-                        <div class="card_switch_03_back" style="float:right;cursor:pointer;"><img
-                                src="/static/image/バックスペースのアイコン素材.png"
-                                onmouseover="this.src='/static/image/バックスペースのアイコン素材2.png'"
-                                onmouseout="this.src='/static/image/バックスペースのアイコン素材.png'">
-                        </div>
-                        <!-- 評価3個目 -->
-                        <form action="{% url 'saveevaluation' %}" method="post">
-                            {% csrf_token %}
-                            <div class="hyouka">
-                                <input id="hoshi111" type="radio" name="rate" required="" value="5" />
-                                <label for="hoshi111">★</label>
-                                <input id="hoshi222" type="radio" name="rate" required="" value="4" />
-                                <label for="hoshi222">★</label>
-                                <input id="hoshi333" type="radio" name="rate" required="" value="3" />
-                                <label for="hoshi333">★</label>
-                                <input id="hoshi444" type="radio" name="rate" required="" value="2" />
-                                <label for="hoshi444">★</label>
-                                <input id="hoshi555" type="radio" name="rate" required="" value="1" />
-                                <label for="hoshi555">★</label>
-                            </div>
-                            <p style="text-align:center;">年代を選択してください。</p>
-                            <div style="margin: 0 auto;width:70%;"><input type="hidden" name="age" required=""
-                                    id="id_age" class="single-slider" value="20" /></div>
-                            <p style="text-align:center;margin-top:3%;">性別を選択してください。</p>
-                            <div class="gender_group">
-                                <input type="radio" id="man3" value="male" name="gender" required=""><label for="man3"
-                                    class="gender" style="margin:1%;"><img src="/static/image/男マーク.png"></label>
-                                <input type="radio" id="woman3" value="female" name="gender" required=""><label
-                                    for="woman3" class="gender" style="margin:1%;"><img
-                                        src="/static/image/女マーク.png"></label>
-                            </div>
-                            <p>
-                                <input type="hidden" name="place" class="form-control" required="" id="id_place"
-                                    value="{{detail3}}">
-                                <input name="author" type="hidden" class="form-control" placeholder="userName"
-                                    id="author1" required="" value="{{id}}">
-                            </p>
-                            <div style="text-align: center;">
-                                <button type="submit" class="btn btn-outline-primary">送信</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </article>
+        </div>
+        <div class="col-md-6">
+            <iframe
+                src='https://www.google.com/maps/embed/v1/place?key=AIzaSyBekiDl6GcMzjHOAp0Y4PPzTZM-iGP_LBA&amp;q={{ content.place.address }}'
+                width="100%" height="400" frameborder='0' style="text-align: center;">
+            </iframe>
+        </div>
     </div>
 </div>
-<div id="map" style="margin-top: 100px;"></div>
+<!-- <div id="map" style="margin-top: 100px;"></div> -->
 
 <input type="hidden" id="ido1" name="chart_labels" value="{{ content.first.ido }}">
 <input type="hidden" id="keido1" name="chart_labels" value="{{ content.first.keido }}">
@@ -420,10 +157,6 @@
 <input type="hidden" id="keido3" name="chart_labels" value="{{ content.third.keido }}">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBekiDl6GcMzjHOAp0Y4PPzTZM-iGP_LBA&libraries=places&callback=initMap"
-    async defer></script>
-<script src="{% static 'js/rootDisplay.js' %}"></script>
 <script src="{% static 'js/card.js' %}"></script>
 <script src="{% static 'js/jquery.range.js' %}"></script>
 {% endblock %}

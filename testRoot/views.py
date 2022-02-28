@@ -1,12 +1,13 @@
 from pickle import FALSE
 from unicodedata import name
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Play, Eat, TypeOfPlace, PrefeCode, Atmosphere, SaveRoot, KeepRoot, CommentDetail, Evaluation, GoodCheck, TokyoCity
-from .forms import PlayForm, EatForm, TypeOfPlaceForm, SaveRootForm, KeepRootForm, CommentForm, EvaluationForm, GoodCheckForm, TokyoCityForm
+from .models import Play, Eat, TypeOfPlace, PrefeCode, Atmosphere, SaveRoot, KeepRoot, CommentDetail, Evaluation, GoodCheck, TokyoCity, SavePlace, CommentDetailTokyo
+from .forms import PlayForm, EatForm, TypeOfPlaceForm, SaveRootForm, KeepRootForm, CommentForm, EvaluationForm, GoodCheckForm, TokyoCityForm, SavePlaceForm, CommentTokyoForm
 import random
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
+
 
 def index(request):
     return render(request, 'testRoot/index.html')
@@ -16,32 +17,33 @@ def test_direction(request):
     return render(request, 'testRoot/test_direction.html')
 
 
-def test1(request): 
+def test1(request):
     if request.method == 'POST':
-        
+
         cities = request.POST.getlist('city')
         place = request.POST.get('place')
         print(place)
-        
+
         if len(cities) == 0:
             return render(request, 'testRoot/index.html')
         else:
-            all_lists = TokyoCity.objects.filter(city__in=cities).filter(type=place)
+            all_lists = TokyoCity.objects.filter(
+                city__in=cities).filter(type=place)
             if len(all_lists) < 3:
                 return render(request, 'testRoot/index.html')
     else:
         return render(request, 'testRoot/index.html')
-        
-    a = random.randint(0,(len(all_lists) - 1))
-    b = random.randint(0,(len(all_lists) - 1))
-    c = random.randint(0,(len(all_lists) - 1))
-            
+
+    a = random.randint(0, (len(all_lists) - 1))
+    b = random.randint(0, (len(all_lists) - 1))
+    c = random.randint(0, (len(all_lists) - 1))
+
     while a == b:
-        b = random.randint(0,(len(all_lists) - 1))
-        
+        b = random.randint(0, (len(all_lists) - 1))
+
     while a == c or b == c:
-        c = random.randint(0,(len(all_lists) - 1))
-            
+        c = random.randint(0, (len(all_lists) - 1))
+
     for i, list in enumerate(all_lists):
         if i == a:
             list_test_1 = list
@@ -49,7 +51,7 @@ def test1(request):
             keido1 = list.keido
             name1 = list.name
             address1 = list.address
-            
+
         if i == b:
             list_test_2 = list
             ido2 = list.ido
@@ -63,23 +65,17 @@ def test1(request):
             keido3 = list.keido
             name3 = list.name
             address3 = list.address
-                
+
     lists = [list_test_1, list_test_2, list_test_3]
-    initial_dict = {
-        'author': request.user,
-        'first': list_test_1,
-        'second': list_test_2,
-        'third': list_test_3,
-    }
-    keepForm = KeepRootForm(initial=initial_dict)
-        
+    saveform = SavePlaceForm()
+
     content = {
-        'ido1':ido1,
-        'keido1':keido1,
-        'ido2':ido2,
-        'keido2':keido2,
-        'ido3':ido3,
-        'keido3':keido3,
+        'ido1': ido1,
+        'keido1': keido1,
+        'ido2': ido2,
+        'keido2': keido2,
+        'ido3': ido3,
+        'keido3': keido3,
         'lists': lists,
         'name1': name1,
         'address1': address1,
@@ -87,13 +83,14 @@ def test1(request):
         'address2': address2,
         'name3': name3,
         'address3': address3,
-        'keepForm': keepForm,
         'author': request.user.id,
-        'first_id':list_test_1.id,
-        'second_id':list_test_2.id,
-        'third_id':list_test_3.id,
+        'first_id': list_test_1.id,
+        'second_id': list_test_2.id,
+        'third_id': list_test_3.id,
+        'savePlace': saveform
     }
     return render(request, 'testRoot/test1.html', content)
+
 
 def test2(request):
     if request.method == "POST":
@@ -112,10 +109,11 @@ def test2(request):
                                     initial_dict = {
                                         'author': request.user,
                                     }
-                                    form = TypeOfPlaceForm(initial=initial_dict)
+                                    form = TypeOfPlaceForm(
+                                        initial=initial_dict)
                                     content = {
-                                        'content':'ごめんなさい！既にその場所は登録されています！',
-                                        'form':form,
+                                        'content': 'ごめんなさい！既にその場所は登録されています！',
+                                        'form': form,
                                         'id': request.user.id,
                                         'author': request.user,
                                     }
@@ -127,7 +125,7 @@ def test2(request):
             'author': request.user,
         }
         form = TypeOfPlaceForm(initial=initial_dict)
-        content  = {
+        content = {
             'form': form,
             'id': request.user.id,
             'author': request.user,
@@ -135,83 +133,75 @@ def test2(request):
     return render(request, 'testRoot/test2.html', content)
 
 
-
 def user(request, id):
-    if request.method == 'POST':
-        form = KeepRootForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.save()
-            return redirect('index')
-    else:
-        lists = KeepRoot.objects.order_by('-created_at').filter(author=request.user)
-        lists_place = TypeOfPlace.objects.order_by('-created_at').filter(author=request.user)
-        
-        p = Paginator(TypeOfPlace.objects.order_by('-created_at').filter(author=request.user), 5)
-        page = request.GET.get('page')
-        place = p.get_page(page)
-        
-        q = Paginator(KeepRoot.objects.order_by('-created_at').filter(author=request.user), 3)
-        qpage = request.GET.get('rootPage')
-        root = q.get_page(qpage)
-        rangeee = list(range(root.paginator.num_pages))
-        
-        rangee = list(range(place.paginator.num_pages))
-        
-        content = {
-            'lists': lists,
-            'lists_place': lists_place,
-            'place':place,
-            'root':root,
-            'rangee':rangee,
-            'rangeee':rangeee,
-        }
-        return render(request, 'testRoot/user.html', content)
+    # lists = SavePlace.objects.order_by(
+    #     '-created_at').filter(author=request.user)
+    # lists_place = TokyoCity.objects.order_by(
+    #     '-created_at').filter(author=request.user)
 
-    
+    p = Paginator(TokyoCity.objects.order_by(
+        '-created_at').filter(author=request.user), 5)
+    page = request.GET.get('page')
+    place = p.get_page(page)
+
+    q = Paginator(SavePlace.objects.order_by(
+        '-created_at').filter(author=request.user), 3)
+    qpage = request.GET.get('rootPage')
+    root = q.get_page(qpage)
+    rangeee = list(range(root.paginator.num_pages))
+
+    rangee = list(range(place.paginator.num_pages))
+
+    content = {
+        'place': place,
+        'root': root,
+        'rangee': rangee,
+        'rangeee': rangeee,
+    }
+    return render(request, 'testRoot/user.html', content)
+
+
 def detail(request, id):
-    root = get_object_or_404(KeepRoot, pk=id)
+    root = get_object_or_404(SavePlace, pk=id)
+    print(root.place.address)
     initial_dict = {
         "author": request.user,
     }
-    form = CommentForm(initial=initial_dict)
+    form = CommentTokyoForm(initial=initial_dict)
     form_evaluation = EvaluationForm()
     form_good = GoodCheckForm()
-    comment1 = CommentDetail.objects.filter(comment_place=root.first).order_by('-created_at')
-    comment2 = CommentDetail.objects.filter(comment_place=root.second).order_by('-created_at')
-    comment3 = CommentDetail.objects.filter(comment_place=root.third).order_by('-created_at')
+    comment1 = CommentDetailTokyo.objects.filter(comment_place=root.place).order_by('-created_at')
     len_comment1 = len(comment1)
-    len_comment2 = len(comment2)
-    len_comment3 = len(comment3)
     contents = {
-        "content":root,
+        "content": root,
         "form": form,
         'id': request.user.id,
-        'detail1':root.first.id,
-        'detail2':root.second.id,
-        'detail3':root.third.id,
-        'comment1':comment1,
-        'comment2':comment2,
-        'comment3':comment3,
-        'len_comment1':len_comment1,
-        'len_comment2':len_comment2,
-        'len_comment3':len_comment3,
-        'form_evaluation':form_evaluation,
-        'form_good':form_good,
+        'detail1': root.id,
+        # 'detail2': root.second.id,
+        # 'detail3': root.third.id,
+        'comment1': comment1,
+        # 'comment2': comment2,
+        # 'comment3': comment3,
+        'len_comment1': len_comment1,
+        # 'len_comment2': len_comment2,
+        # 'len_comment3': len_comment3,
+        'form_evaluation': form_evaluation,
+        'form_good': form_good,
     }
     return render(request, 'testRoot/detail.html', contents)
+
 
 def like(request, id):
     if request.method == 'POST':
         good_form = GoodCheckForm(request.POST)
         goodCheck = good_form.save(commit=False)
         good_list = GoodCheck.objects.filter(place=goodCheck.place)
-        
+
         if len(good_list) != 0:
             for list in good_list:
                 if list.author == goodCheck.author:
                     return redirect(request.META['HTTP_REFERER'])
-                
+
         goodCheck.save()
         place = get_object_or_404(TypeOfPlace, pk=id)
         place.good += 1
@@ -220,15 +210,19 @@ def like(request, id):
         return redirect(request.META['HTTP_REFERER'])
     else:
         return redirect('index')
-    
+
+
 def topPage(request):
     return render(request, 'testRoot/topPage.html')
+
 
 def topPage1(request):
     return render(request, 'testRoot/topPage1.html')
 
+
 def topIndex(request):
     return render(request, 'testRoot/topPage.html')
+
 
 def savecomment(request):
     if request.method == 'POST':
@@ -240,7 +234,8 @@ def savecomment(request):
             return redirect(request.META['HTTP_REFERER'])
     else:
         return redirect('index')
-    
+
+
 def saveevaluation(request):
     if request.method == 'POST':
         form = EvaluationForm(request.POST)
@@ -250,7 +245,8 @@ def saveevaluation(request):
             return redirect(request.META['HTTP_REFERER'])
     else:
         return redirect('index')
-    
+
+
 def test3(request):
     if request.method == "POST":
         form = TokyoCityForm(request.POST, request.FILES)
@@ -270,8 +266,8 @@ def test3(request):
                                     }
                                     form = TokyoCityForm(initial=initial_dict)
                                     content = {
-                                        'content':'ごめんなさい！既にその場所は登録されています！',
-                                        'form':form,
+                                        'content': 'ごめんなさい！既にその場所は登録されています！',
+                                        'form': form,
                                         'id': request.user.id,
                                         'author': request.user,
                                     }
@@ -283,12 +279,25 @@ def test3(request):
             'author': request.user,
         }
         form = TypeOfPlaceForm(initial=initial_dict)
-        content  = {
+        content = {
             'form': form,
             'id': request.user.id,
             'author': request.user,
         }
     return render(request, 'testRoot/test3.html', content)
+
+
+def savePlace(request):
+    if request.method == "POST":
+        form = SavePlaceForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            print(post)
+            return redirect(request.META['HTTP_REFERER'])
+    else:
+        return redirect('index')
+
 
 # def test3(request):
 #     return render(request, 'testRoot/test3.html')
@@ -308,7 +317,7 @@ def test3(request):
 #             return redirect('user')
 #     else:
 #         return redirect('index')
-    
+
 
 # def rootDisplay(request):
 #     lists_play = Play.objects.all()
@@ -318,13 +327,13 @@ def test3(request):
 #     z = random.randint(1,len(lists_play))
 #     while x == z:
 #         z = random.randint(1,len(lists_play))
-        
+
 #     list_1 = Play.objects.filter(pk=x)
 #     list_2 = Eat.objects.filter(pk=y)
 #     list_3 = Play.objects.filter(pk=z)
 #     lists = [list_1, list_2, list_3]
-    
-    
+
+
 #     for i, list in enumerate(lists):
 #         for date in list:
 #             if i == 0:
@@ -333,16 +342,15 @@ def test3(request):
 #                 address2 = date.address
 #             else:
 #                 address3 = date.address
-    
-    
-    
+
+
 #     content = {
 #         'address1': address1,
 #         'address2': address2,
 #         'address3': address3,
 #         'lists': lists
 #     }
-    
+
 #     return render(request, 'testRoot/rootDisplay.html', content)
 
 # def list_play(request):
@@ -350,7 +358,7 @@ def test3(request):
 #     content = {
 #         'lists': lists
 #     }
-    
+
 #     return render(request, 'testRoot/list_play.html', content)
 
 # def list_eat(request):
@@ -359,7 +367,7 @@ def test3(request):
 #     content = {
 #         'lists': lists
 #     }
-    
+
 #     return render(request, 'testRoot/list_eat.html', content)
 
 # def test(request):
@@ -368,27 +376,27 @@ def test3(request):
 # def list_all(request):
 #     lists_test_play = TypeOfPlace.objects.filter(type="play")
 #     lists_test_eat = TypeOfPlace.objects.filter(type="eat")
-    
+
 #     a = random.randint(0,len(lists_test_play) - 1)
 #     b = random.randint(0,len(lists_test_eat) - 1)
 #     c = random.randint(0,len(lists_test_play) - 1)
-        
+
 #     while a == c:
 #         c = random.randint(0,len(lists_test_play))
-        
+
 #     for i, list in enumerate(lists_test_play):
 #         print(i)
 #         if i == a:
 #             list_test_1 = list
 #         if i == c:
 #             list_test_3 = list
-            
+
 #     for i, list in enumerate(lists_test_eat):
 #         if i == b:
 #             list_test_2 = list
-            
+
 #     lists_test = [list_test_1,list_test_2,list_test_3]
-    
+
 #     content = {
 #         'lists_test': lists_test
 #     }

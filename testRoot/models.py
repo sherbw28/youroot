@@ -84,6 +84,15 @@ class CommentDetail(models.Model):
     def __str__(self):
         return self.comment
     
+class CommentDetailTokyo(models.Model):
+    comment = models.CharField(max_length=255)
+    comment_place = models.ForeignKey(TokyoCity, on_delete=models.PROTECT)
+    author = models.ForeignKey(get_user_model(),on_delete=models.CASCADE, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.comment
+    
 class SaveRoot(models.Model):
     rootName = models.CharField(max_length=255)
     name1 = models.CharField(max_length=255)
@@ -173,6 +182,14 @@ class Evaluation(models.Model):
 class GoodCheck(models.Model):
     author = models.ForeignKey(get_user_model(),on_delete=models.CASCADE, null=True)
     place = models.ForeignKey(TypeOfPlace, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.place.name
+    
+class SavePlace(models.Model):
+    author = models.ForeignKey(get_user_model(),on_delete=models.CASCADE, null=True)
+    place = models.ForeignKey(TokyoCity, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
     
     def __str__(self):
         return self.place.name

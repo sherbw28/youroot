@@ -35,8 +35,21 @@
                 <p class="card__text2_01">{{list.comment}}</p>
             </div>
             <div class="card__footer_01">
-                <p class="card__text_01" style="float: left;"><a href="https://www.google.com/search?q={{list.name}}"class="button_01 -compact">googleで検索する</a></p>
-                <a href="https://www.google.com/search?q={{list.name}}" style="text-decoration: none;"><button class="btn btn-outline-primary">保存する</button></a>
+                <a href="https://www.google.com/search?q={{list.name}}" style="margin-right: 20%;"><button class="btn btn-outline-primary">googleで検索する</button></a>
+                <form action="{% url 'savePlace' %}" method="post" style="display: flex; float: right;">
+                    {% csrf_token %}
+                    <p>
+                        <input type="hidden" name="author" class="form-control" placeholder="userName" required="" id="id_author" value="{{author}}"> 
+                        {% if forloop.counter == 1 %}
+                        <input type="hidden" name="place" class="form-control" required="" id="id_place" value="{{first_id}}">     
+                        {% elif forloop.counter == 2 %}
+                        <input type="hidden" name="place" class="form-control" required="" id="id_place" value="{{second_id}}">     
+                        {% else %}
+                        <input type="hidden" name="place" class="form-control" required="" id="id_place" value="{{third_id}}">     
+                        {% endif %}
+                    </p>
+                    <button class="btn btn-outline-primary" type="submit">保存する</button>
+                </form>
             </div>
             <div>
                 <iframe
