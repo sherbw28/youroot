@@ -25,7 +25,9 @@ def test1(request):
         print(place)
 
         if len(cities) == 0:
-            return render(request, 'testRoot/index.html')
+            all_lists = TokyoCity.objects.all()
+            if len(all_lists) < 3:
+                return render(request, 'testRoot/index.html')
         else:
             all_lists = TokyoCity.objects.filter(
                 city__in=cities).filter(type=place)
@@ -145,7 +147,7 @@ def user(request, id):
     place = p.get_page(page)
 
     q = Paginator(SavePlace.objects.order_by(
-        '-created_at').filter(author=request.user), 3)
+        '-created_at').filter(author=request.user), 5)
     qpage = request.GET.get('rootPage')
     root = q.get_page(qpage)
     rangeee = list(range(root.paginator.num_pages))
