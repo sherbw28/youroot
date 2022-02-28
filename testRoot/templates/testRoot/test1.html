@@ -35,20 +35,25 @@
                 <p class="card__text2_01">{{list.comment}}</p>
             </div>
             <div class="card__footer_01">
-                <p class="card__text_01"><a href="https://www.google.com/search?q={{list.name}}"
-                        class="button_01 -compact">googleで検索する</a></p>
+                <p class="card__text_01" style="float: left;"><a href="https://www.google.com/search?q={{list.name}}"class="button_01 -compact">googleで検索する</a></p>
+                <a href="https://www.google.com/search?q={{list.name}}" style="text-decoration: none;"><button class="btn btn-outline-primary">保存する</button></a>
+            </div>
+            <div>
+                <iframe
+                    src='https://www.google.com/maps/embed/v1/place?key=AIzaSyBekiDl6GcMzjHOAp0Y4PPzTZM-iGP_LBA&amp;q={{ list.address }}'
+                    width="100%" height="300" frameborder='0' style="text-align: center;">
+                </iframe>
             </div>
         </article>
     </div>
     {% endfor %}
 </div>
-<div id="map" style="margin-top:1%;margin-left:2%; height:50%;width:50%;float:left;"></div>
+<!-- <div id="map" style="margin-top:1%;margin-left:2%; height:50%;width:50%;float:left;"></div>
 <div class="test1_form" style="float:left;">
     <div style="margin:2%;">
         <h3 style="margin-top:1%; color: #3c4c46; text-align: center;">今回のルートを保存する</h3>
         <form action="{% url 'user' user.id%}" method="post" id="touroku">
             {% csrf_token %}
-            <!-- {{keepForm.as_p}} -->
             <p>
             <div style="margin-top:5%;"></div>
             <input type="text" name="name" class="form-control mx-auto" placeholder="ルート名" maxlength="255" required=""
@@ -66,7 +71,7 @@
             <div class="text-center"><button class="btn btn-outline-primary">ルートを保存</button></div>
         </form>
     </div>
-</div>
+</div> -->
 <input type="hidden" id="ido1" name="chart_labels" value="{{ ido1 }}">
 <input type="hidden" id="keido1" name="chart_labels" value="{{ keido1 }}">
 <input type="hidden" id="ido2" name="chart_labels" value="{{ ido2 }}">
@@ -81,10 +86,10 @@
 <input type="hidden" id="address3" name="chart_labels" value="{{ address3 }}">
 <input type="hidden" id="author" name="chart_labels" value="{{ user }}">
 
-<script
+<!-- <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBekiDl6GcMzjHOAp0Y4PPzTZM-iGP_LBA&libraries=places&callback=initMap"
-    async defer></script>
-<script src="{% static 'js/rootDisplay.js' %}"></script>
+    async defer></script> -->
+<!-- <script src="{% static 'js/rootDisplay.js' %}"></script> -->
 <script src="{% static 'js/saveRoot.js' %}"></script>
 <script src="{% static 'js/card.js' %}"></script>
 {% endblock %}

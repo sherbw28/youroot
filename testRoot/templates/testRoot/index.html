@@ -6,7 +6,7 @@
         {% csrf_token %}
         <div class="main-container-check container">
             <div class="row row-cols-auto">
-                <h2 style="margin: 0 auto;">場所を選択</h2>
+                <h2 style="margin: 0 auto;">エリアを選択</h2>
                 <div class="check-buttons col" style="border-bottom: 1px solid #3c4c46; border-radius: 30px;"
                     id="city_area">
                 </div>
@@ -17,17 +17,18 @@
             <h2>どこにいく？</h2>
             <div class="radio-buttons">
                 <label class="custom-radio">
-                    <input type="radio" name="atm" value="観光" checked />
+                    <input type="radio" name="place" value="play" checked />
                     <span class="radio-btn"><i class="las la-check"></i>
                         <div class="hobbies-icon">
                             <!-- <i class="las la-biking"></i> -->
-                            <i class="las la-circle"></i>
+                            <!-- <i class="las la-circle"></i> -->
+                            <i class="las la-map"></i>
                             <h3>観光</h3>
                         </div>
                     </span>
                 </label>
                 <label class="custom-radio">
-                    <input type="radio" name="atm" value="カフェ" />
+                    <input type="radio" name="place" value="cafe" />
                     <span class="radio-btn"><i class="las la-check"></i>
                         <div class="hobbies-icon">
                             <!-- <i class="las la-table-tennis"></i> -->
@@ -37,29 +38,19 @@
                     </span>
                 </label>
                 <label class="custom-radio">
-                    <input type="radio" name="atm" value="ご飯" />
+                    <input type="radio" name="place" value="eat" />
                     <span class="radio-btn"><i class="las la-check"></i>
                         <div class="hobbies-icon">
-                            <i class="las la-table-tennis"></i>
+                            <!-- <i class="las la-table-tennis"></i> -->
+                            <i class="las la-solid la-utensils"></i>
                             <h3>ご飯</h3>
-                        </div>
-                    </span>
-                </label>
-                <label class="custom-radio">
-                    <input type="radio" name="atm" value="一人で" />
-                    <span class="radio-btn"><i class="las la-check"></i>
-                        <div class="hobbies-icon">
-                            <i class="las la-biking"></i>
-                            <h3>一人で</h3>
                         </div>
                     </span>
                 </label>
             </div>
         </div>
-        {% if user.is_authenticated %}
         <button type="submit" class="btn btn-outline-primary" id="searchButton">ルートを検索&nbsp;<i
                 class="bi bi-search"></i></button>
-        {% endif %}
     </form>
 </div>
 

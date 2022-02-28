@@ -130,7 +130,6 @@
     }
     
     .card__footer_01 {
-      display: flex;
       padding: 1rem;
       border-top: 1px solid #ddd;
       text-align: center;

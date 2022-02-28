@@ -18,57 +18,44 @@ def test_direction(request):
 
 def test1(request): 
     if request.method == 'POST':
-        # area = request.POST.get("area")
-        prefs = request.POST.getlist("pref")
-        atmos = request.POST.get('atm')
+        
         cities = request.POST.getlist('city')
-        print(len(cities))
+        place = request.POST.get('place')
+        print(place)
+        
         if len(cities) == 0:
-            if len(prefs) == 0:
-                return render(request, 'testRoot/index.html')
-            if atmos == 'all':
-                lists_test_play = TypeOfPlace.objects.filter(type="play").filter(pref__name__in=prefs)
-                lists_test_eat = TypeOfPlace.objects.filter(type="eat").filter(pref__name__in=prefs)
-            else:
-                lists_test_play = TypeOfPlace.objects.filter(type="play").filter(pref__name__in=prefs).filter(atmosphere__type=atmos)
-                lists_test_eat = TypeOfPlace.objects.filter(type="eat").filter(pref__name__in=prefs).filter(atmosphere__type=atmos)
-                
-            if (len(lists_test_play) < 2) or (len(lists_test_eat) < 1):
-                return render(request, 'testRoot/index.html') 
+            return render(request, 'testRoot/index.html')
         else:
-            if len(prefs) == 0:
+            all_lists = TokyoCity.objects.filter(city__in=cities).filter(type=place)
+            if len(all_lists) < 3:
                 return render(request, 'testRoot/index.html')
-            if atmos == 'all':
-                lists_test_play = TypeOfPlace.objects.filter(type="play").filter(pref__name__in=prefs).filter(city__in=cities)
-                lists_test_eat = TypeOfPlace.objects.filter(type="eat").filter(pref__name__in=prefs).filter(city__in=cities)
-            else:
-                lists_test_play = TypeOfPlace.objects.filter(type="play").filter(pref__name__in=prefs).filter(atmosphere__type=atmos).filter(city__in=cities)
-                lists_test_eat = TypeOfPlace.objects.filter(type="eat").filter(pref__name__in=prefs).filter(atmosphere__type=atmos).filter(city__in=cities)
-                
-            if (len(lists_test_play) < 2) or (len(lists_test_eat) < 1):
-                return render(request, 'testRoot/index.html')
-            
-        
     else:
-        lists_test_play = TypeOfPlace.objects.filter(type="play")
-        lists_test_eat = TypeOfPlace.objects.filter(type="eat")
+        return render(request, 'testRoot/index.html')
         
-    a = random.randint(0,len(lists_test_play) - 1)
-    b = random.randint(0,len(lists_test_eat) - 1)
-    c = random.randint(0,len(lists_test_play) - 1)
+    a = random.randint(0,(len(all_lists) - 1))
+    b = random.randint(0,(len(all_lists) - 1))
+    c = random.randint(0,(len(all_lists) - 1))
             
-    while a == c:
-        c = random.randint(0,len(lists_test_play))
+    while a == b:
+        b = random.randint(0,(len(all_lists) - 1))
+        
+    while a == c or b == c:
+        c = random.randint(0,(len(all_lists) - 1))
             
-    for i, list in enumerate(lists_test_play):
+    for i, list in enumerate(all_lists):
         if i == a:
             list_test_1 = list
             ido1 = list.ido
             keido1 = list.keido
             name1 = list.name
             address1 = list.address
-
-
+            
+        if i == b:
+            list_test_2 = list
+            ido2 = list.ido
+            keido2 = list.keido
+            name2 = list.name
+            address2 = list.address
 
         if i == c:
             list_test_3 = list
@@ -76,16 +63,6 @@ def test1(request):
             keido3 = list.keido
             name3 = list.name
             address3 = list.address
-            number3 = 3
-            
-    for i, list in enumerate(lists_test_eat):
-        if i == b:
-            list_test_2 = list
-            ido2 = list.ido
-            keido2 = list.keido
-            name2 = list.name
-            address2 = list.address
-            number2 = 2
                 
     lists = [list_test_1, list_test_2, list_test_3]
     initial_dict = {
