@@ -179,9 +179,44 @@ class Evaluation(models.Model):
     def __str__(self):
         return self.place.name
     
+class EvaluationTokyo(models.Model):
+    AGE_CHOICE = (
+        ('10','10代'),
+        ('20','20代'),
+        ('30','30代'),
+        ('40','40代'),
+        ('50','50代'),
+        ('60','60代'),
+        ('70','70代'),
+        ('80','80代'),
+        ('90','90代'),
+    )
+    
+    GENDER_CHOICE = (
+        ('male','男'),
+        ('female','女'),
+    )
+    
+    rate = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    age = models.CharField(max_length=255, choices=AGE_CHOICE)
+    gender = models.CharField(max_length=255, choices=GENDER_CHOICE)
+    place = models.ForeignKey(TokyoCity, on_delete=models.CASCADE)
+    author = models.ForeignKey(get_user_model(),on_delete=models.CASCADE, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.place.name
+    
 class GoodCheck(models.Model):
     author = models.ForeignKey(get_user_model(),on_delete=models.CASCADE, null=True)
     place = models.ForeignKey(TypeOfPlace, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.place.name
+    
+class GoodCheckTokyo(models.Model):
+    author = models.ForeignKey(get_user_model(),on_delete=models.CASCADE, null=True)
+    place = models.ForeignKey(TokyoCity, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.place.name

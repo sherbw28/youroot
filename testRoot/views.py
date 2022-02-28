@@ -1,8 +1,8 @@
 from pickle import FALSE
 from unicodedata import name
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Play, Eat, TypeOfPlace, PrefeCode, Atmosphere, SaveRoot, KeepRoot, CommentDetail, Evaluation, GoodCheck, TokyoCity, SavePlace, CommentDetailTokyo
-from .forms import PlayForm, EatForm, TypeOfPlaceForm, SaveRootForm, KeepRootForm, CommentForm, EvaluationForm, GoodCheckForm, TokyoCityForm, SavePlaceForm, CommentTokyoForm
+from .models import Play, Eat, TypeOfPlace, PrefeCode, Atmosphere, SaveRoot, KeepRoot, CommentDetail, Evaluation, GoodCheck, TokyoCity, SavePlace, CommentDetailTokyo, GoodCheckTokyo, EvaluationTokyo
+from .forms import PlayForm, EatForm, TypeOfPlaceForm, SaveRootForm, KeepRootForm, CommentForm, EvaluationForm, GoodCheckForm, TokyoCityForm, SavePlaceForm, CommentTokyoForm, GoodCheckTokyoForm, EvaluationTokyoForm
 import random
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -163,28 +163,21 @@ def user(request, id):
 
 def detail(request, id):
     root = get_object_or_404(SavePlace, pk=id)
-    print(root.place.address)
     initial_dict = {
         "author": request.user,
     }
     form = CommentTokyoForm(initial=initial_dict)
-    form_evaluation = EvaluationForm()
-    form_good = GoodCheckForm()
+    form_evaluation = EvaluationTokyoForm()
+    form_good = GoodCheckTokyoForm()
     comment1 = CommentDetailTokyo.objects.filter(comment_place=root.place).order_by('-created_at')
     len_comment1 = len(comment1)
     contents = {
         "content": root,
         "form": form,
         'id': request.user.id,
-        'detail1': root.id,
-        # 'detail2': root.second.id,
-        # 'detail3': root.third.id,
+        'detail1': root.place.id,
         'comment1': comment1,
-        # 'comment2': comment2,
-        # 'comment3': comment3,
         'len_comment1': len_comment1,
-        # 'len_comment2': len_comment2,
-        # 'len_comment3': len_comment3,
         'form_evaluation': form_evaluation,
         'form_good': form_good,
     }
@@ -193,9 +186,9 @@ def detail(request, id):
 
 def like(request, id):
     if request.method == 'POST':
-        good_form = GoodCheckForm(request.POST)
+        good_form = GoodCheckTokyoForm(request.POST)
         goodCheck = good_form.save(commit=False)
-        good_list = GoodCheck.objects.filter(place=goodCheck.place)
+        good_list = GoodCheckTokyo.objects.filter(place=goodCheck.place)
 
         if len(good_list) != 0:
             for list in good_list:
@@ -203,7 +196,7 @@ def like(request, id):
                     return redirect(request.META['HTTP_REFERER'])
 
         goodCheck.save()
-        place = get_object_or_404(TypeOfPlace, pk=id)
+        place = get_object_or_404(TokyoCity, pk=id)
         place.good += 1
         place.save()
         print(place.good)
@@ -226,11 +219,10 @@ def topIndex(request):
 
 def savecomment(request):
     if request.method == 'POST':
-        form = CommentForm(request.POST)
+        form = CommentTokyoForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
-            # return redirect('index')
             return redirect(request.META['HTTP_REFERER'])
     else:
         return redirect('index')
@@ -238,7 +230,7 @@ def savecomment(request):
 
 def saveevaluation(request):
     if request.method == 'POST':
-        form = EvaluationForm(request.POST)
+        form = EvaluationTokyoForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
             post.save()

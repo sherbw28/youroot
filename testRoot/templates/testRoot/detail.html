@@ -16,9 +16,9 @@
                     <div class="border-line"></div>
                     <div class="card__body_01">
                         <div style="display:flex;">
-                            <div class="abc">
+                            <!-- <div class="abc">
                                 <p>A</p>
-                            </div>
+                            </div> -->
                             <p class="card__title_01" style="color: #3c4c46;">{{content.place.name}}</p>
                         </div>
                         <p class="labels">住所:</p>
@@ -27,7 +27,7 @@
                         <p class="card__text2_01" style="color: #3c4c46;">{{content.place.comment}}</p>
                     </div>
                     <div class="card__footer_01">
-                        <form action="{% url 'like' content.id%}" method="post">
+                        <form action="{% url 'like' content.place.id%}" method="post" style="display: flex;">
                             {% csrf_token %}
                             <p>
                                 <input type="hidden" name="place" class="form-control" value="{{detail1}}" required="" id="id_place"> 
