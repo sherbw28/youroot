@@ -27,12 +27,13 @@ SECRET_KEY = 'django-insecure-72el(^+66^crh0wbs5#*#@o3cft^=2hs-29zmuya(i958i5h^f
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.herokuapp.com']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'whitenoise.runserver_nostatic'
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
