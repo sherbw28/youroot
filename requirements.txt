@@ -1,0 +1,17 @@
+asgiref
+certifi
+charset-normalizer
+dj-database-url
+Django
+gunicorn
+heroku
+idna
+Pillow
+pip
+python-dateutil
+requests
+setuptools
+sqlparse
+urllib3
+wheel
+whitenoise
